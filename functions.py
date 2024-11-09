@@ -16,6 +16,15 @@ example_board = ({1 : [6,6],
 
 
 def calculate_score(board):
+    """
+    Calculates the total score of a given board.
+
+    Args:
+        board: A dictionary representing the game board.
+
+    Returns:
+        The total score of the board.
+    """
     score = 0
     for col_num, col in board.items():
         die_counts = {}
@@ -57,7 +66,13 @@ def computer_move(ai_board, opponent_board, die_value):
 
     
 def cancel_die(board, other_board):
-    #removes die from board if opponent places same value die in the corresponding column
+    """
+    Removes dice from a board if the opponent has placed the same value in the corresponding column.
+
+    Args:
+        board: The board to modify.
+        other_board: The opponent's board.
+    """
     for columnkey in other_board:
         if columnkey in board:
             for die in other_board[columnkey]:
@@ -67,6 +82,13 @@ def cancel_die(board, other_board):
     
 
 def manage_game(player1_board, player2_board):
+    """
+    Manages the game flow, alternating between player and computer turns.
+
+    Args:
+        player1_board: The player's board.
+        player2_board: The computer's board.
+    """
     roll_die = MockFunc([3, 2, 1, 3, 6, 5, 3, 5, 1, 4, 3, 6])
     is_board_full = MockFunc(False)
 
@@ -89,13 +111,11 @@ def manage_game(player1_board, player2_board):
                     print("Invalid input. Please try again.")
 
             player1_board[column_choice].append(roll)
-            if roll in player2_board[column_choice]:
-                player2_board[column_choice].remove(roll)
+            player2_board = cancel_die(player2_board, player1_board)  
         else:
             column_choice = computer_move(player2_board, player1_board, roll)
             player2_board[column_choice].append(roll)
-            if roll in player1_board[column_choice]:
-                player1_board[column_choice].remove(roll)
+            player1_board = cancel_die(player1_board, player2_board)
 
         current_player = 3 - current_player 
 
