@@ -16,11 +16,19 @@ example_board = ({1 : [6,6],
 
 
 def calculate_score(board):
-    #calculates the score of the board
-    #takes board
-    #returns int
-    return
-
+    score = 0
+    for col_num, col in board.items():
+        die_counts = {}
+        for die in col:
+            die_counts[die] = die_counts.get(die, 0) + 1
+        for key, count in die_counts.items():
+            if count == 2:
+                score += key * 4
+            elif count == 3:
+                score += key * 9
+            else:
+                score += key
+    return score
 
 
 def computer_move(ai_board, opponent_board, die_value):
