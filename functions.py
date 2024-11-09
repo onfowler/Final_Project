@@ -58,7 +58,12 @@ def computer_move(ai_board, opponent_board, die_value):
     
 def cancel_die(board, other_board):
     #removes die from board if opponent places same value die in the corresponding column
-    return
+    for columnkey in other_board:
+        if columnkey in board:
+            for die in other_board[columnkey]:
+                if die in board[columnkey]:
+                    board[columnkey].remove(die)
+    return board
     
 
 def manage_game(player1_board, player2_board):
