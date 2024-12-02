@@ -82,10 +82,12 @@ def cancel_die(board, other_board):
         board: The board to modify.
         other_board: The opponent's board.
     """
-    for column_key in other_board.board:
-        if column_key in board.board:
-            matching_dice = set(board.board[column_key]) & set(other_board.board[column_key])
-            board.board[column_key] = [die for die in board.board[column_key] if die not in matching_dice]
+    for columnkey in other_board.board:
+        if columnkey in board.board:
+            for die in other_board.board[columnkey]:
+                if die in board.board[columnkey]:
+                    board.board[columnkey].remove(die)
+    return board
     
 
 def manage_game(player1_board, player2_board):
