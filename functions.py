@@ -46,7 +46,21 @@ class Board:
         return score
     
     def __str__(self):
-        return (f"{self.board}")
+        """
+        Returns a string representation of the board in a text art style,
+        including the current score.
+        """
+
+        board_str = ""
+        for row in range(3):
+            for col in range(3):
+                if row < len(self.board[col + 1]):
+                    board_str += f"|{self.board[col + 1][row]:^3}|"
+                else:
+                    board_str += "|   |"
+            board_str += "\n"
+        board_str += f"Score: {self.calculate_score()}"
+        return board_str
 
 
 def computer_move(ai_board, opponent_board, die_value):
@@ -102,8 +116,8 @@ def manage_game(player1_board, player2_board):
     current_player = 1
 
     while not player1_board.is_full() and not player2_board.is_full():
-        print(f"Player {current_player} Board: {player1_board if current_player == 1 else player2_board}")
-        print(f"Player {current_player} Score: {(player1_board.calculate_score() if current_player == 1 else player2_board.calculate_score())}")
+        print(f"Player 2 Board:\n{player2_board}\n")
+        print(f"Player 1 Board:\n{player1_board}")
 
         roll = random.randint(1,6)
         
@@ -128,7 +142,10 @@ def manage_game(player1_board, player2_board):
     player1_score = player1_board.calculate_score()
     player2_score = player2_board.calculate_score()
     
+    print(f"Player 2 Board:\n{player2_board}")
+    print(f"Player 1 Board:\n{player1_board}")
     print("\nGame Over!")
+    
     if player1_score > player2_score:
         print("Player 1 Wins!")
     elif player2_score > player1_score:
