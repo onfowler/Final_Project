@@ -1,10 +1,12 @@
 import random
+import time
 
 def roll():
     return random.randint(1, 6)
 
 class Board:
     def __init__(self):
+        #Side effect - creates self.board, self.score attributes
         self.board = {1: [], 2: [], 3:[]}
         self.score = 0
         
@@ -78,10 +80,10 @@ def computer_move(ai_board, opponent_board, die_value):
 
     for col_index, col_values in ai_board.board.items():
         
-        if die_value in col_values:
+        if die_value in col_values and len(col_values) < 3:
             return col_index
 
-        if die_value in opponent_board.board[col_index]:
+        if die_value in opponent_board.board[col_index] and len(col_values) < 3:
             return col_index
 
     min_score_col = min(ai_board.board, key=lambda x: sum(ai_board.board[x]))
@@ -99,7 +101,7 @@ def cancel_die(board, other_board):
     for columnkey in other_board.board:
         if columnkey in board.board:
             for die in other_board.board[columnkey]:
-                if die in board.board[columnkey]:
+                while die in board.board[columnkey]:
                     board.board[columnkey].remove(die)
     return board
     
@@ -116,24 +118,30 @@ def manage_game(player1_board, player2_board):
     current_player = 1
 
     while not player1_board.is_full() and not player2_board.is_full():
-        print(f"Player 2 Board:\n{player2_board}\n")
-        print(f"Player 1 Board:\n{player1_board}")
+        
+        print(f"Computer Board:\n{player2_board}\n")
+        print(f"Your Board:\n{player1_board}")
 
         roll = random.randint(1,6)
         
-        print(f"Player {current_player} rolled a {roll}.\n")
+        print(f"\n{('You' if current_player == 1 else 'Computer')} rolled a {roll}.")
 
         if current_player == 1:
             while True:
-                column_choice = int(input("What column would you like to place (1, 2, 3)? "))
-                if 0 <= column_choice <= 3 and player1_board.place_die(column_choice, roll):
-                    break
-                else:
-                    print("Invalid input. Please try again.")
+                try:
+                    column_choice = int(input("What column would you like to place (1, 2, 3)? "))
+                    if 0 <= column_choice <= 3 and player1_board.place_die(column_choice, roll):
+                        break
+                    else:
+                        print("Column is full or invalid. Please try again.")
+                except ValueError:
+                    print("Please type a column number 1, 2, 3")
 
             player2_board = cancel_die(player2_board, player1_board)  
         else:
             column_choice = computer_move(player2_board, player1_board, roll)
+            print(f"Computer placed {roll} in column {column_choice}.\n")
+            time.sleep(1.5)
             player2_board.place_die(column_choice, roll)
             player1_board = cancel_die(player1_board, player2_board)
 
@@ -157,6 +165,7 @@ def manage_game(player1_board, player2_board):
         
 def main():
     player1_board = Board()
+    
     player2_board = Board()
     
     manage_game(player1_board, player2_board)
