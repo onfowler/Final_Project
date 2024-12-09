@@ -111,6 +111,10 @@ def cancel_die(board, other_board):
     Args:
         board: The board to modify.
         other_board: The opponent's board.
+    Returns: 
+        board: The updated player's board after canceling out the die.
+    Side Effect: 
+    Modifies the board object by removing dice from its columns.
     """
     for columnkey in other_board.board:
         if columnkey in board.board:
