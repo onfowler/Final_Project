@@ -24,27 +24,41 @@ class Board:
 
     def calculate_score(self):
         """
-        Calculates the total score of a given board.
-
+       Calculate the total score of the board by evaluating the dice placed 
+    in each column. The score for each column is based on the number of 
+    matching dice:
+    
+    - One die: worth its face value.
+    - Two matching dice: worth 4 times the die value.
+    - Three matching dice: worth 9 times the die value.
+    
         Args:
             board: A dictionary representing the game board.
 
         Returns:
             The total score of the board.
+
+        Side effects:
+            - Modifies the `self.score` attribute: The calculated total score is 
+              stored in `self.score` for future reference or use in the game flow.
         """
         score = 0
+        # Iterate over each column in the board
         for col_num, col in self.board.items():
-            die_counts = {}
+            die_counts = {} # Dictionary to store count of each die in the column
+        # Count the frequency of each die value in the column
             for die in col:
                 die_counts[die] = die_counts.get(die, 0) + 1
+
+              # Calculate the score based on the count of dice in the column
             for key, count in die_counts.items():
                 if count == 2:
-                    score += key * 4
+                    score += key * 4   # Two matching dice
                 elif count == 3:
-                    score += key * 9
+                    score += key * 9   # Three matching dice
                 else:
-                    score += key
-        self.score = score
+                    score += key  # One die, worth its face value
+        self.score = score  # Update the score attribute
         return score
     
     def __str__(self):
