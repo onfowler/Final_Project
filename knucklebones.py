@@ -122,8 +122,7 @@ def computer_move(ai_board, opponent_board, die_value, difficulty = "normal"):
         min_score_col = min(ai_board.board, key=lambda x: sum(ai_board.board[x]))
         return min_score_col
     elif difficulty == "easy":
-        return random.randint(1, 3) 
-        
+        return random.randint(1, 3)      
 
     
 def cancel_die(board, other_board):
@@ -138,15 +137,13 @@ def cancel_die(board, other_board):
     Side Effect: 
     Modifies the board object by removing dice from its columns.
     """
-    for columnkey in other_board.board:
-        if columnkey in board.board:
-            for die in other_board.board[columnkey]:
-                while die in board.board[columnkey]:
-                    board.board[columnkey].remove(die)
+    for column_key in other_board.board:
+        if column_key in board.board:
+            board.board[column_key] = list(set(board.board[column_key]) - set(other_board.board[column_key]))
     return board
     
 
-def manage_game(player1_board, player2_board):
+def manage_game(player1_board, player2_board, difficulty):
     """
     Manages the game flow, alternating between player and computer turns.
 
@@ -183,7 +180,7 @@ def manage_game(player1_board, player2_board):
                 except ValueError:
                     print("Please type a column number 1, 2, 3")
 
-            player2_board = cancel_die(player2_board, player1_board)  
+            player2_board = cancel_die(player2_board, player1_board, difficulty)  
         else:
             column_choice = computer_move(player2_board, player1_board, roll)
             print(f"Computer placed {roll} in column {column_choice}.\n")
@@ -207,8 +204,7 @@ def manage_game(player1_board, player2_board):
     else:
         print("It's a tie!")
         
-        
-        
+           
 def main():
     """
     Main function to run the game.
