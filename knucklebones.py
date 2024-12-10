@@ -2,21 +2,48 @@ import random
 import time
 
 def roll():
+    """Rolls a six-sided die and returns a random integer between 1 and 6."""
     return random.randint(1, 6)
 
 class Board:
+    """Represents a game board for knucklebones.
+    Attributes:
+        board: A dictionary representing the game board.
+        score: The current score of the board.
+    """
     def __init__(self):
-        #Side effect - creates self.board, self.score attributes
+        """Initializes an empty game board.
+        Side Effects:
+            creates and sets self.board and self.score
+        """
         self.board = {1: [], 2: [], 3:[]}
         self.score = 0
-        
+
     def is_full(self):
+        """Checks if the board is full.
+
+        Returns:
+            True if the board is full, False otherwise.
+        Side effects:
+            None
+        """
         for col in self.board.values():
             if len(col) < 3:
                 return False
         return True
-    
+
     def place_die(self, column, die_value):
+        """Places a die on the board if the column is not full.
+
+        Args:
+            column: The column number (1, 2, or 3).
+            die_value: The value of the die to place.
+
+        Returns:
+            True if the die was placed successfully, False otherwise.
+        Side effects:
+            Modifies self.board
+        """
         if len(self.board[column]) < 3:
             self.board[column].append(die_value)
             return True
@@ -43,22 +70,19 @@ class Board:
               stored in `self.score` for future reference or use in the game flow.
         """
         score = 0
-        # Iterate over each column in the board
         for col_num, col in self.board.items():
-            die_counts = {} # Dictionary to store count of each die in the column
-        # Count the frequency of each die value in the column
+            die_counts = {} 
             for die in col:
                 die_counts[die] = die_counts.get(die, 0) + 1
 
-              # Calculate the score based on the count of dice in the column
             for key, count in die_counts.items():
                 if count == 2:
-                    score += key * 4   # Two matching dice
+                    score += key * 4   
                 elif count == 3:
-                    score += key * 9   # Three matching dice
+                    score += key * 9  
                 else:
-                    score += key  # One die, worth its face value
-        self.score = score  # Update the score attribute
+                    score += key  
+        self.score = score  
         return score
     
     def __str__(self):
@@ -79,7 +103,7 @@ class Board:
         return board_str
 
 
-def computer_move(ai_board, opponent_board, die_value):
+def computer_move(ai_board, opponent_board, die_value, difficulty = "normal"):
     """
     Makes the best move for the computer player.
 
@@ -90,18 +114,24 @@ def computer_move(ai_board, opponent_board, die_value):
 
     Returns:
         The column index where the die should be placed.
+    
+    Side effects:
+        None
     """
+    if difficulty == "normal":
+        for col_index, col_values in ai_board.board.items():
+            
+            if die_value in col_values and len(col_values) < 3:
+                return col_index
 
-    for col_index, col_values in ai_board.board.items():
+            if die_value in opponent_board.board[col_index] and len(col_values) < 3:
+                return col_index
+
+        min_score_col = min(ai_board.board, key=lambda x: sum(ai_board.board[x]))
+        return min_score_col
+    elif difficulty == "easy":
+        return random.randint(1, 3) 
         
-        if die_value in col_values and len(col_values) < 3:
-            return col_index
-
-        if die_value in opponent_board.board[col_index] and len(col_values) < 3:
-            return col_index
-
-    min_score_col = min(ai_board.board, key=lambda x: sum(ai_board.board[x]))
-    return min_score_col
 
     
 def cancel_die(board, other_board):
@@ -131,6 +161,12 @@ def manage_game(player1_board, player2_board):
     Args:
         player1_board: The player's board.
         player2_board: The computer's board.
+
+    Returns:
+        None
+
+    Side effects:
+        Modifies the player1_board and player2_board objects.
     """
 
     current_player = 1
@@ -182,6 +218,18 @@ def manage_game(player1_board, player2_board):
         
         
 def main():
+    """
+    Main function to run the game.
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Side effects:
+        None
+    """
     player1_board = Board()
     
     player2_board = Board()
