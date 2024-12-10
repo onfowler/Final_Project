@@ -49,7 +49,7 @@ class Board:
             return True
         return False
 
-    def calculate_score(self):
+   def calculate_score(self):
         """
        Calculate the total score of the board by evaluating the dice placed 
     in each column. The score for each column is based on the number of 
@@ -70,19 +70,11 @@ class Board:
               stored in `self.score` for future reference or use in the game flow.
         """
         score = 0
-        for col_num, col in self.board.items():
-            die_counts = {} 
-            for die in col:
-                die_counts[die] = die_counts.get(die, 0) + 1
-
-            for key, count in die_counts.items():
-                if count == 2:
-                    score += key * 4   
-                elif count == 3:
-                    score += key * 9  
-                else:
-                    score += key  
-        self.score = score  
+        for column in self.board.values():
+            die_counts = {die: column.count(die) for die in column}
+            for die, count in die_counts.items():
+                score += die * (4 if count == 2 else 9 if count == 3 else 1)
+        self.score = score
         return score
     
     def __str__(self):
