@@ -123,7 +123,7 @@ def computer_move(ai_board, opponent_board, die_value, difficulty = "normal"):
         min_score_col = min(ai_board.board, key=lambda x: sum(ai_board.board[x]))
         return min_score_col
     elif difficulty == "easy":
-        return random.randint(1, 3)      
+        return min(ai_board.board, key=lambda x: sum(ai_board.board[x]))     
 
     
 def cancel_die(board, other_board):
@@ -138,9 +138,9 @@ def cancel_die(board, other_board):
     Side Effect: 
     Modifies the board object by removing dice from its columns.
     """
-    for column_key in other_board.board:
-        if column_key in board.board:
-            board.board[column_key] = list(set(board.board[column_key]) - set(other_board.board[column_key]))
+    for column_key in board.board:
+        if column_key in other_board.board:
+            board.board[column_key] = [die for die in board.board[column_key] if die not in other_board.board[column_key]]
     return board
    
     
@@ -182,9 +182,9 @@ def manage_game(player1_board, player2_board, difficulty):
                 except ValueError:
                     print("Please type a column number 1, 2, 3")
 
-            player2_board = cancel_die(player2_board, player1_board, difficulty)  
+            player2_board = cancel_die(player2_board, player1_board)  
         else:
-            column_choice = computer_move(player2_board, player1_board, roll)
+            column_choice = computer_move(player2_board, player1_board, roll, difficulty)
             print(f"Computer placed {roll} in column {column_choice}.\n")
             time.sleep(1.5)
             player2_board.place_die(column_choice, roll)
@@ -228,7 +228,7 @@ def main():
     
     player2_board = Board()
     
-    manage_game(player1_board, player2_board)
+    manage_game(player1_board, player2_board, args.difficulty)
 
 if __name__ == "__main__":
     main()
