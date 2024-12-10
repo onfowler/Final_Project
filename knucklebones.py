@@ -49,7 +49,7 @@ class Board:
             return True
         return False
 
-   def calculate_score(self):
+    def calculate_score(self):
         """
        Calculate the total score of the board by evaluating the dice placed 
     in each column. The score for each column is based on the number of 
