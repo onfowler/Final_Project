@@ -14,7 +14,10 @@ Bibliography.pdf is the pdf which is the bibliography of our sources
 
 ## How to Run
 
-In the terminal, navigate to the Final_Project folder and then type python .\knucklebones.py
+In the terminal, navigate to the Final_Project folder and then type 
+python .\knucklebones.py 
+OR
+to play easy mode type: python .\knucklebones.py -d easy 
 
 ## How to Play
 
