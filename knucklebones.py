@@ -1,5 +1,6 @@
 import random
 import time
+import argparse
 
 def roll():
     """Rolls a six-sided die and returns a random integer between 1 and 6."""
@@ -137,12 +138,11 @@ def cancel_die(board, other_board):
     Side Effect: 
     Modifies the board object by removing dice from its columns.
     """
-    for columnkey in other_board.board:
-        if columnkey in board.board:
-            for die in other_board.board[columnkey]:
-                while die in board.board[columnkey]:
-                    board.board[columnkey].remove(die)
+    for column_key in other_board.board:
+        if column_key in board.board:
+            board.board[column_key] = list(set(board.board[column_key]) - set(other_board.board[column_key]))
     return board
+   
     
 
 def manage_game(player1_board, player2_board, difficulty):
@@ -220,6 +220,10 @@ def main():
     Side effects:
         None
     """
+    parser = argparse.ArgumentParser(description="Knucklebones game")
+    parser.add_argument("-d", "--difficulty", choices=["easy", "normal"], default="normal", help="Difficulty level")
+    args = parser.parse_args()
+
     player1_board = Board()
     
     player2_board = Board()
