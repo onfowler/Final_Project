@@ -11,7 +11,7 @@ Our game is a replication of "Knucklebones" which is a mini-game inside the vide
 knucklebones.py is the main program where the game's code is written
 test.py is a test file that we used to test using github
 Bibliography.pdf is the pdf which is the bibliography of our sources
-functions.pdf is the pdf which displays the function table
+functions.pdf is the pdf which displays the attribution function table
 
 ## How to Run
 
