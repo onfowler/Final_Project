@@ -137,9 +137,11 @@ def cancel_die(board, other_board):
     Side Effect: 
     Modifies the board object by removing dice from its columns.
     """
-    for column_key in other_board.board:
-        if column_key in board.board:
-            board.board[column_key] = list(set(board.board[column_key]) - set(other_board.board[column_key]))
+    for columnkey in other_board.board:
+        if columnkey in board.board:
+            for die in other_board.board[columnkey]:
+                while die in board.board[columnkey]:
+                    board.board[columnkey].remove(die)
     return board
     
 
